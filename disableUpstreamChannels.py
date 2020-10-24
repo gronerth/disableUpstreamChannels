@@ -53,6 +53,7 @@ while(finishLoop==False):
 
 
 	for item in docsis_channel_stats:
+		print("upstream_initial_index = " + str(upstream_initial_index))
 		upstream_initial_index=int(item.oid_index)
 		if item.oid == '.1.3.6.1.2.1.2.2.1.2':#ifDescr
 			if "docsCableUpstream" in item.value:
