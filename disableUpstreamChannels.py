@@ -66,7 +66,7 @@ while(finishLoop==False):
 		elif item.oid == '.1.3.6.1.2.1.2.2.1.7':#ifAdminStatus
 			if item.oid_index  in docsis_channels.upstream_channel:
 				docsis_channels.upstream_channel[item.oid_index].setStatus(str(item.value))
-		elif '.1.3.6.1.4.1.2011.6.128.1.1.2.43.1.3.' in item.oid:#Frequency
+		elif '.1.3.6.1.2.1.10.127.1.1.2.1.2.' in item.oid:#Frequency
 			if item.oid_index  in docsis_channels.upstream_channel:
 				docsis_channels.upstream_channel[item.oid_index].setFrequency(int(item.value))
 								 
