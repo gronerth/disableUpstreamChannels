@@ -53,7 +53,7 @@ while(finishLoop==False):
 
 
 	for item in docsis_channel_stats:
-		print("upstream_initial_index = " + str(upstream_initial_index))
+		
 		upstream_initial_index=int(item.oid_index)
 		if upstream_initial_index >= 2013798401:
 			print("Finishing loop, upstream_initial_index = " + str(upstream_initial_index))
@@ -66,7 +66,8 @@ while(finishLoop==False):
 		elif item.oid == '.1.3.6.1.2.1.2.2.1.7':#ifAdminStatus
 			if item.oid_index  in docsis_channels.upstream_channel:
 				docsis_channels.upstream_channel[item.oid_index].setStatus(str(item.value))
-		elif '.1.3.6.1.2.1.10.127.1.1.2.1.2.' in item.oid:#Frequency
+		elif '.1.3.6.1.2.1.10.127.1.1.2.1.2' in item.oid:#Frequency
+			print("upstream_initial_index = " + str(upstream_initial_index))
 			if item.oid_index  in docsis_channels.upstream_channel:
 				docsis_channels.upstream_channel[item.oid_index].setFrequency(int(item.value))
 								 
