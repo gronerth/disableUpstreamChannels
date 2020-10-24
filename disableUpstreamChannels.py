@@ -53,7 +53,7 @@ while(finishLoop==False):
 
 
 	for item in docsis_channel_stats:
-		upstream_initial_index=item.oid_index
+		upstream_initial_index=int(item.oid_index)
 		if item.oid == '.1.3.6.1.2.1.2.2.1.2':#ifDescr
 			if "docsCableUpstream" in item.value:
 				docsis_channels.upstream_channel[item.oid_index] = docsisChannel(str(item.value))
@@ -64,7 +64,7 @@ while(finishLoop==False):
 		elif '.1.3.6.1.4.1.2011.6.128.1.1.2.43.1.3.' in item.oid:#Frequency
 			if item.oid_index  in docsis_channels.upstream_channel:
 				docsis_channels.upstream_channel[item.oid_index].setFrequency(int(item.value))
-	
+								 
 	if upstream_initial_index >= 2013798401:
 		print("Finishing loop, upstream_initial_index = " + str(upstream_initial_index))
 		finishLoop=True
