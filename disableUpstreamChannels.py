@@ -66,6 +66,7 @@ while(finishLoop==False):
 				docsis_channels.upstream_channel[item.oid_index].setFrequency(int(item.value))
 	
 	if upstream_initial_index >= 2013798401:
+		print("Finishing loop, upstream_initial_index = " + str(upstream_initial_index))
 		finishLoop=True
 
 for upstream_channel in docsis_channels.upstream_channel:
