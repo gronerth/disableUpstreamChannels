@@ -63,5 +63,5 @@ for item in docsis_channel_stats:
 
 
 for upstream_channel in docsis_channels.upstream_channel:
-	print(docsis_channels.upstream_channel[upstream_channel].ifDescr + "," +  docsis_channels.upstream_channel[upstream_channel].frequency+ "," +  docsis_channels.upstream_channel[upstream_channel].status)
+	print(docsis_channels.upstream_channel[upstream_channel].ifDescr + "," +  str(docsis_channels.upstream_channel[upstream_channel].frequency) + "," +  docsis_channels.upstream_channel[upstream_channel].status)
 
