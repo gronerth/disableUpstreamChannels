@@ -5,6 +5,7 @@ import argparse
 
 
 snmp_max_repetitions=100
+olt_list = {}
 
 class docsisChannel(object):
 	def __init__ (self, ifDescr):
