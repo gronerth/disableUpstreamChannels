@@ -100,7 +100,7 @@ if len(olt_list)>0:
 			#print(olt_name)
 			pollDocsisChannels(olt_name,olt_list[olt_name],args.community)
 		except Exception as e:
-			print(e)
+			print("olt_name: " + olt_name,e)
 			continue
 else:
 	if(args.olt_name=="" or args.ip_address==""):
