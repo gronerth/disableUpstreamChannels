@@ -62,7 +62,7 @@ def pollDocsisChannels(olt_name,ip_address,community):
 		for item in docsis_channel_stats:
 			upstream_initial_index=int(item.oid_index)
 			if upstream_initial_index >= 2013798401:
-				print("Finishing loop, upstream_initial_index = " + str(upstream_initial_index))
+				#print("Finishing loop, upstream_initial_index = " + str(upstream_initial_index))
 				finishLoop=True
 				break
 			if item.oid == '.1.3.6.1.2.1.2.2.1.2':#ifDescr
@@ -73,7 +73,7 @@ def pollDocsisChannels(olt_name,ip_address,community):
 				if item.oid_index  in docsis_channels.upstream_channel:
 					docsis_channels.upstream_channel[item.oid_index].setStatus(str(item.value))
 			elif '.1.3.6.1.2.1.10.127.1.1.2.1.2' in item.oid:#Frequency
-				print("upstream_initial_index = " + str(upstream_initial_index))
+				#print("upstream_initial_index = " + str(upstream_initial_index))
 				if item.oid_index  in docsis_channels.upstream_channel:
 					docsis_channels.upstream_channel[item.oid_index].setFrequency(int(item.value))
 									
@@ -97,7 +97,7 @@ if args.olt_file_name != "":
 if len(olt_list)>0:
 	for olt_name in olt_list:
 		try:
-			print(olt_name)
+			#print(olt_name)
 			pollDocsisChannels(olt_name,olt_list[olt_name],args.community)
 		except Exception as e:
 			print(e)
