@@ -40,27 +40,33 @@ docsis_channels = docsisChannels()
 
 upstream_initial_index=1980243960
 
-oids=[]
-oids.append('IF-MIB::ifDescr.' + str(upstream_initial_index))
-oids.append('IF-MIB::ifAdminStatus.' + str(upstream_initial_index))
-oids.append('.1.3.6.1.2.1.10.127.1.1.2.1.2.' + str(upstream_initial_index)) #Frequency
+finishLoop=False
 
-docsis_channel_stats = session.get_bulk(oids,non_repeaters=0,max_repetitions=snmp_max_repetitions)
+while(!finishLoop):
 
+	oids=[]
+	oids.append('IF-MIB::ifDescr.' + str(upstream_initial_index))
+	oids.append('IF-MIB::ifAdminStatus.' + str(upstream_initial_index))
+	oids.append('.1.3.6.1.2.1.10.127.1.1.2.1.2.' + str(upstream_initial_index)) #Frequency
 
-for item in docsis_channel_stats:
-    if item.oid == '.1.3.6.1.2.1.2.2.1.2':#ifDescr
-        if "docsCableUpstream" in item.value:
-			docsis_channels.upstream_channel[item.oid_index] = docsisChannel(str(item.value))
-			docsis_channels.upstream_channel[item.oid_index].ifDescr = str(item.value) #redundancy?
-    elif item.oid == '.1.3.6.1.2.1.2.2.1.7':#ifAdminStatus
-        if item.oid_index  in docsis_channels.upstream_channel:
-        	docsis_channels.upstream_channel[item.oid_index].setStatus(str(item.value))
-    elif '.1.3.6.1.4.1.2011.6.128.1.1.2.43.1.3.' in item.oid:#Frequency
-		if item.oid_index  in docsis_channels.upstream_channel:
-			docsis_channels.upstream_channel[item.oid_index].setFrequency(int(item.value))
+	docsis_channel_stats = session.get_bulk(oids,non_repeaters=0,max_repetitions=snmp_max_repetitions)
 
 
+	for item in docsis_channel_stats:
+		upstream_initial_index=item.oid_index
+		if item.oid == '.1.3.6.1.2.1.2.2.1.2':#ifDescr
+			if "docsCableUpstream" in item.value:
+				docsis_channels.upstream_channel[item.oid_index] = docsisChannel(str(item.value))
+				docsis_channels.upstream_channel[item.oid_index].ifDescr = str(item.value) #redundancy?
+		elif item.oid == '.1.3.6.1.2.1.2.2.1.7':#ifAdminStatus
+			if item.oid_index  in docsis_channels.upstream_channel:
+				docsis_channels.upstream_channel[item.oid_index].setStatus(str(item.value))
+		elif '.1.3.6.1.4.1.2011.6.128.1.1.2.43.1.3.' in item.oid:#Frequency
+			if item.oid_index  in docsis_channels.upstream_channel:
+				docsis_channels.upstream_channel[item.oid_index].setFrequency(int(item.value))
+	
+	if upstream_initial_index >= 2013798401:
+		finishLoop=True
 
 for upstream_channel in docsis_channels.upstream_channel:
 	print(docsis_channels.upstream_channel[upstream_channel].ifDescr + "," +  str(docsis_channels.upstream_channel[upstream_channel].frequency) + "," +  docsis_channels.upstream_channel[upstream_channel].status)
