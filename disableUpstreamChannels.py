@@ -42,7 +42,7 @@ upstream_initial_index=1980243960
 
 finishLoop=False
 
-while(!finishLoop):
+while(finishLoop==False):
 
 	oids=[]
 	oids.append('IF-MIB::ifDescr.' + str(upstream_initial_index))
