@@ -134,6 +134,12 @@ def pollDownstreamDocsisChannels(olt_name,ip_address,community):
 			continue 
 		print(olt_name+","+docsis_channels.downstream_channel[downstream_channel].ifDescr + "," +  str(channel_frequency) + "," +  docsis_channels.downstream_channel[downstream_channel].status)
 
+def polling_olt(olt_name,ip_address,community):
+	if(args.type_channel=="u"):
+		pollDocsisChannels(olt_name,ip_address,community)
+	elif args.type_channel=="d":
+		pollDownstreamDocsisChannels(olt_name,ip_address,community)
+
 
 args = parser.parse_args()
 
@@ -147,10 +153,11 @@ if len(olt_list)>0:
 	for olt_name in olt_list:
 		try:
 			#print(olt_name)
-			if(args.type_channel=="u"):
-				pollDocsisChannels(olt_name,olt_list[olt_name],args.community)
-			elif args.type_channel=="d":
-				pollDownstreamDocsisChannels(olt_name,olt_list[olt_name],args.community)
+			polling_olt(args.olt_name,args.ip_address,args.community)
+	#		if(args.type_channel=="u"):
+	#			pollDocsisChannels(olt_name,olt_list[olt_name],args.community)
+	#		elif args.type_channel=="d":
+	#			pollDownstreamDocsisChannels(olt_name,olt_list[olt_name],args.community)
 		except Exception as e:
 			print("olt_name: " + olt_name,e)
 			continue
