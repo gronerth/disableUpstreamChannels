@@ -6,6 +6,7 @@ import argparse
 
 snmp_max_repetitions=100
 olt_list = {}
+filter_list=[]
 
 class docsisChannel(object):
 	def __init__ (self, ifDescr):
@@ -39,8 +40,18 @@ parser.add_argument('--olt_file', dest='olt_file_name', default="",
 parser.add_argument('--type_channel',dest='type_channel',default="u",help="Export upstream (u), downstream(d) or both (ud)")
 parser.add_argument('--community',dest='community',default='u2000_ro',help='SNMP read community')
 parser.add_argument('--disUpFreq',dest='disUpFreq',default='24.2,19.4,17.8',help='Docsis 3.0 upstream frequencies to disable')
+parser.add_argument('--filtercsv',dest='filtercsv',default='filter_csv_file',help='List of ipaddress,frameid to avoid doing changes')
 #parser.add_argument('--measurement',dest='community',default='u2000_ro',help='SNMP read community')
 
+disUpFreq=[]
+tmpArray = args.disUpFreq.split(",")
+for frequency in tmpArray:
+	disUpFreq.append(int(float(frequency)*10000000))
+
+def setValue(oids,ip_address,community):
+	session = Session(hostname=ip_address, community=community, version=2, use_numeric=True)
+	output=session.set_multiple(oids)
+	print(output)
 
 
 def pollDocsisChannels(olt_name,ip_address,community):
@@ -56,12 +67,13 @@ def pollDocsisChannels(olt_name,ip_address,community):
 	while(finishLoop==False):
 
 		oids=[]
+		set_oids=[]
 		oids.append('IF-MIB::ifDescr.' + str(upstream_initial_index))
 		oids.append('IF-MIB::ifAdminStatus.' + str(upstream_initial_index))
 		oids.append('.1.3.6.1.2.1.10.127.1.1.2.1.2.' + str(upstream_initial_index)) #Frequency
 
 		docsis_channel_stats = session.get_bulk(oids,non_repeaters=0,max_repetitions=snmp_max_repetitions)
-
+		current_frame=0
 
 		for item in docsis_channel_stats:
 			upstream_initial_index=int(item.oid_index)
@@ -80,6 +92,14 @@ def pollDocsisChannels(olt_name,ip_address,community):
 				#print("upstream_initial_index = " + str(upstream_initial_index))
 				if item.oid_index  in docsis_channels.upstream_channel:
 					docsis_channels.upstream_channel[item.oid_index].setFrequency(int(item.value))
+					current_frame = docsis_channels.upstream_channel[item.oid_index].frameid
+					ipAndFrame = ip_address + "," + current_frame
+					if ipAndFrame not in  filter_list:
+						if int(item.value) in disUpFreq:
+							set_oids.append((item.oid,2))
+		
+		if len(set_oids>0):
+			setValue(set_oids,ip_address,community)
 									
 		
 
@@ -148,6 +168,12 @@ if args.olt_file_name != "":
 		csv_reader = csv.reader(csv_file, delimiter=',')
 		for row in csv_reader:
 			olt_list[row[0]]=row[1]
+
+if args.filtercsv != "":
+	with open(args.filtercsv) as csv_file:
+		csv_reader = csv.reader(csv_file, delimiter=',')
+		for row in csv_reader:
+			filter_list.append(row)
 
 if len(olt_list)>0:
 	for olt_name in olt_list:
