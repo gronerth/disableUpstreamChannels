@@ -51,9 +51,9 @@ disUpFreq=[]
 
 tmpArray = args.disUpFreq.split(",")
 for frequency in tmpArray:
-	disUpFreq.append(int(float(frequency)*10000000))
+	disUpFreq.append(int(float(frequency)*1000000))
 
-print(disUpFreq)
+#print(disUpFreq)
 
 def setValue(oids,ip_address,community):
 	session = Session(hostname=ip_address, community=community, version=2, use_numeric=True)
@@ -102,7 +102,7 @@ def pollDocsisChannels(olt_name,ip_address,community):
 					current_frame = docsis_channels.upstream_channel[item.oid_index].frameid
 					ipAndFrame = ip_address + "," + current_frame
 					if ipAndFrame not in  filter_list:
-						print("-----Frequency: " + str(int(item.value)))
+						#print("-----Frequency: " + str(int(item.value)))
 						if int(item.value) in disUpFreq:
 							set_oids.append((item.oid,2))
 		
