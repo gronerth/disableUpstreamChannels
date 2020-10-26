@@ -190,7 +190,7 @@ if len(olt_list)>0:
 	for olt_name in olt_list:
 		try:
 			#print(olt_name)
-			polling_olt(olt_name,args.ip_address,args.community)
+			polling_olt(olt_name,olt_list[olt_name],args.community)
 	#		if(args.type_channel=="u"):
 	#			pollDocsisChannels(olt_name,olt_list[olt_name],args.community)
 	#		elif args.type_channel=="d":

@@ -1,0 +1,10 @@
+python disableUpstreamChannels.py --ip 190.43.139.1 --olt olt_la_molina --type_channel u
+python disableUpstreamChannels.py --ip 190.43.139.1 --olt olt_la_molina --type_channel d
+
+python disableUpstreamChannels.py --ip 190.43.139.1 --olt olt_la_molina --olt_file tlf_hfc_olt.csv --type_channel u >> OLT_UPSTREAM_CHANNELS.csv
+python disableUpstreamChannels.py --ip 190.43.139.1 --olt olt_la_molina --olt_file tlf_hfc_olt.csv --type_channel d >> OLT_DOWNSTREAM_CHANNELS.csv
+
+
+
+python disableUpstreamChannels.py --ip vacio --olt vacio --olt_file tlf_hfc_olt.csv --community u2000_rw --type_channel u --disUpFreq 19.2,24.2,24.0
+
