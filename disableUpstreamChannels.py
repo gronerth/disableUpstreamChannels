@@ -43,7 +43,12 @@ parser.add_argument('--disUpFreq',dest='disUpFreq',default='24.2,19.4,17.8',help
 parser.add_argument('--filtercsv',dest='filtercsv',default='filter_csv_file',help='List of ipaddress,frameid to avoid doing changes')
 #parser.add_argument('--measurement',dest='community',default='u2000_ro',help='SNMP read community')
 
+args = parser.parse_args()
+
 disUpFreq=[]
+
+
+
 tmpArray = args.disUpFreq.split(",")
 for frequency in tmpArray:
 	disUpFreq.append(int(float(frequency)*10000000))
@@ -161,7 +166,7 @@ def polling_olt(olt_name,ip_address,community):
 		pollDownstreamDocsisChannels(olt_name,ip_address,community)
 
 
-args = parser.parse_args()
+
 
 if args.olt_file_name != "":
 	with open(args.olt_file_name) as csv_file:
