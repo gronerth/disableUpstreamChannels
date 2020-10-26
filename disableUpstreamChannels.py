@@ -40,7 +40,7 @@ parser.add_argument('--olt_file', dest='olt_file_name', default="",
 parser.add_argument('--type_channel',dest='type_channel',default="u",help="Export upstream (u), downstream(d) or both (ud)")
 parser.add_argument('--community',dest='community',default='u2000_ro',help='SNMP read community')
 parser.add_argument('--disUpFreq',dest='disUpFreq',default='24.2,19.4,17.8',help='Docsis 3.0 upstream frequencies to disable')
-parser.add_argument('--filtercsv',dest='filtercsv',default='filter_csv_file',help='List of ipaddress,frameid to avoid doing changes')
+parser.add_argument('--filtercsv',dest='filtercsv',default='',help='List of ipaddress,frameid to avoid doing changes')
 #parser.add_argument('--measurement',dest='community',default='u2000_ro',help='SNMP read community')
 
 args = parser.parse_args()
