@@ -57,8 +57,9 @@ for frequency in tmpArray:
 
 def setValue(oids,ip_address,community):
 	session = Session(hostname=ip_address, community=community, version=2, use_numeric=True)
+	print(oids)
 	output=session.set_multiple(oids)
-	print("Setting Value!!!!!")
+	
 
 
 def pollDocsisChannels(olt_name,ip_address,community):
