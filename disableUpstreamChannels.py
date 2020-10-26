@@ -14,6 +14,8 @@ class docsisChannel(object):
 		self.frequency=0.0
 		values=self.ifDescr.split('/')
 		self.channelid=values[len(values)-1]
+		values=ifDescr.split('/')[0]
+		self.frameid=values.split(' ')[1]
 
 	def setFrequency(self,frequency):
 		self.frequency=frequency
@@ -25,11 +27,6 @@ class docsisChannels(object):
 	def __init__(self):
 		self.upstream_channel = {}
 		self.downstream_channel = {}
-		self.frameid=0
-	
-	def setFrameid(self,ifDescr):
-		values=ifDescr.split('/')[0]
-		self.frameid=values.split(' ')[1]
 
 	def addUpstreamChannel(self,ifDescr):
 		self.upstream_channel[ifDescr] = docsisChannel(ifDescr)
@@ -74,7 +71,6 @@ def pollDocsisChannels(olt_name,ip_address,community):
 				break
 			if item.oid == '.1.3.6.1.2.1.2.2.1.2':#ifDescr
 				if "docsCableUpstream" in item.value:
-					docsis_channels.setFrameid(str(item.value))
 					docsis_channels.upstream_channel[item.oid_index] = docsisChannel(str(item.value))
 					docsis_channels.upstream_channel[item.oid_index].ifDescr = str(item.value) #redundancy?
 			elif item.oid == '.1.3.6.1.2.1.2.2.1.7':#ifAdminStatus
@@ -91,7 +87,7 @@ def pollDocsisChannels(olt_name,ip_address,community):
 		channel_frequency = docsis_channels.upstream_channel[upstream_channel].frequency
 		if channel_frequency == 0:
 			continue 
-		print(olt_name+","+docsis_channels.upstream_channel[upstream_channel].ifDescr + ","+ str(docsis_channels.frameid)+ "," + str(docsis_channels.upstream_channel[upstream_channel].channelid) +","+  str(channel_frequency) + "," +  docsis_channels.upstream_channel[upstream_channel].status)
+		print(olt_name+","+docsis_channels.upstream_channel[upstream_channel].ifDescr + ","+ str(docsis_channels.upstream_channel[upstream_channel].frameid)+ "," + str(docsis_channels.upstream_channel[upstream_channel].channelid) +","+  str(channel_frequency) + "," +  docsis_channels.upstream_channel[upstream_channel].status)
 
 
 def pollDownstreamDocsisChannels(olt_name,ip_address,community):
@@ -122,7 +118,6 @@ def pollDownstreamDocsisChannels(olt_name,ip_address,community):
 				break
 			if item.oid == '.1.3.6.1.2.1.2.2.1.2':#ifDescr
 				if "docsCableDownstream" in item.value:
-					docsis_channels.setFrameid(str(item.value))
 					docsis_channels.downstream_channel[item.oid_index] = docsisChannel(str(item.value))
 					docsis_channels.downstream_channel[item.oid_index].ifDescr = str(item.value) #redundancy?
 			elif item.oid == '.1.3.6.1.2.1.2.2.1.7':#ifAdminStatus
@@ -137,7 +132,7 @@ def pollDownstreamDocsisChannels(olt_name,ip_address,community):
 		channel_frequency = docsis_channels.downstream_channel[downstream_channel].frequency
 		if channel_frequency == 0:
 			continue 
-		print(olt_name+","+docsis_channels.downstream_channel[downstream_channel].ifDescr + "," +str(docsis_channels.frameid) +","+str(docsis_channels.downstream_channel[downstream_channel].channelid)+","+str(channel_frequency) + "," +  docsis_channels.downstream_channel[downstream_channel].status)
+		print(olt_name+","+docsis_channels.downstream_channel[downstream_channel].ifDescr + "," +str(docsis_channels.downstream_channel[downstream_channel].frameid) +","+str(docsis_channels.downstream_channel[downstream_channel].channelid)+","+str(channel_frequency) + "," +  docsis_channels.downstream_channel[downstream_channel].status)
 
 def polling_olt(olt_name,ip_address,community):
 	if(args.type_channel=="u"):
