@@ -50,8 +50,9 @@ disUpFreq=[]
 
 
 tmpArray = args.disUpFreq.split(",")
-for frequency in tmpArray:
-	disUpFreq.append(int(float(frequency)*1000000))
+if len(tmpArray)>0:
+	for frequency in tmpArray:
+		disUpFreq.append(int(float(frequency)*1000000))
 
 #print(disUpFreq)
 
