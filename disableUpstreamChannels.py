@@ -88,7 +88,7 @@ def pollDocsisChannels(olt_name,ip_address,community):
 		channel_frequency = docsis_channels.upstream_channel[upstream_channel].frequency
 		if channel_frequency == 0:
 			continue 
-		print(olt_name+","+docsis_channels.upstream_channel[upstream_channel].ifDescr + ","+ docsis_channels.frameid+ "," + docsis_channels.upstream_channel[upstream_channel].channelid +","+  str(channel_frequency) + "," +  docsis_channels.upstream_channel[upstream_channel].status)
+		print(olt_name+","+docsis_channels.upstream_channel[upstream_channel].ifDescr + ","+ str(docsis_channels.frameid)+ "," + str(docsis_channels.upstream_channel[upstream_channel].channelid) +","+  str(channel_frequency) + "," +  docsis_channels.upstream_channel[upstream_channel].status)
 
 
 def pollDownstreamDocsisChannels(olt_name,ip_address,community):
@@ -133,7 +133,7 @@ def pollDownstreamDocsisChannels(olt_name,ip_address,community):
 		channel_frequency = docsis_channels.downstream_channel[downstream_channel].frequency
 		if channel_frequency == 0:
 			continue 
-		print(olt_name+","+docsis_channels.downstream_channel[downstream_channel].ifDescr + "," +docsis_channels.frameid +","+docsis_channels.downstream_channel[downstream_channel].channelid+","+str(channel_frequency) + "," +  docsis_channels.downstream_channel[downstream_channel].status)
+		print(olt_name+","+docsis_channels.downstream_channel[downstream_channel].ifDescr + "," +str(docsis_channels.frameid) +","+str(docsis_channels.downstream_channel[downstream_channel].channelid)+","+str(channel_frequency) + "," +  docsis_channels.downstream_channel[downstream_channel].status)
 
 def polling_olt(olt_name,ip_address,community):
 	if(args.type_channel=="u"):
