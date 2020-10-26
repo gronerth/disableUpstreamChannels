@@ -105,7 +105,7 @@ def pollDocsisChannels(olt_name,ip_address,community):
 					if ipAndFrame not in  filter_list:
 						#print("-----Frequency: " + str(int(item.value)))
 						if int(item.value) in disUpFreq:
-							set_oids.append((str(item.oid)+"."+str(item.oid_index),2,'INTEGER'))
+							set_oids.append(('.1.3.6.1.2.1.2.2.1.7'+"."+str(item.oid_index),2,'INTEGER'))
 		
 		if len(set_oids)>0:
 			setValue(set_oids,ip_address,community)
