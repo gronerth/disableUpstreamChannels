@@ -103,7 +103,7 @@ def pollDocsisChannels(olt_name,ip_address,community):
 						if int(item.value) in disUpFreq:
 							set_oids.append((item.oid,2))
 		
-		if len(set_oids>0):
+		if len(set_oids)>0:
 			setValue(set_oids,ip_address,community)
 									
 		
