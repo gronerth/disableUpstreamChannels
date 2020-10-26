@@ -39,7 +39,7 @@ parser.add_argument('--olt_file', dest='olt_file_name', default="",
                     help='File with the list of olts in csv format oltname,IP')
 parser.add_argument('--type_channel',dest='type_channel',default="u",help="Export upstream (u), downstream(d) or both (ud)")
 parser.add_argument('--community',dest='community',default='u2000_ro',help='SNMP read community')
-parser.add_argument('--disUpFreq',dest='disUpFreq',default='24.2,19.4,17.8',help='Docsis 3.0 upstream frequencies to disable')
+parser.add_argument('--disUpFreq',dest='disUpFreq',default='',help='Docsis 3.0 upstream frequencies to disable') #Modify later to specify if enable or disable
 parser.add_argument('--filtercsv',dest='filtercsv',default='',help='List of ipaddress,frameid to avoid doing changes')
 #parser.add_argument('--measurement',dest='community',default='u2000_ro',help='SNMP read community')
 
@@ -57,10 +57,11 @@ for frequency in tmpArray:
 
 def setValue(oids,ip_address,community):
 	session = Session(hostname=ip_address, community=community, version=2, use_numeric=True)
-	print(oids)
-	output=session.set_multiple(oids)
-	
-
+	try:
+		output=session.set_multiple(oids)
+	except Exception as e:
+		print("setValue: ip_address: " + ip_address,e)
+		
 
 def pollDocsisChannels(olt_name,ip_address,community):
 
@@ -188,7 +189,7 @@ if len(olt_list)>0:
 	for olt_name in olt_list:
 		try:
 			#print(olt_name)
-			polling_olt(args.olt_name,args.ip_address,args.community)
+			polling_olt(olt_name,args.ip_address,args.community)
 	#		if(args.type_channel=="u"):
 	#			pollDocsisChannels(olt_name,olt_list[olt_name],args.community)
 	#		elif args.type_channel=="d":
