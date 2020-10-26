@@ -26,10 +26,12 @@ class docsisChannels(object):
 		self.upstream_channel = {}
 		self.downstream_channel = {}
 		self.frameid=0
-
-	def addUpstreamChannel(self,ifDescr):
+	
+	def setFrameid(self,ifDescr):
 		values=ifDescr.split('/')[0]
 		self.frameid=values.split(' ')[1]
+
+	def addUpstreamChannel(self,ifDescr):
 		self.upstream_channel[ifDescr] = docsisChannel(ifDescr)
 
 parser = argparse.ArgumentParser(description='enable/disable upstream channels of all DCCAPs from OLT')
@@ -72,6 +74,7 @@ def pollDocsisChannels(olt_name,ip_address,community):
 				break
 			if item.oid == '.1.3.6.1.2.1.2.2.1.2':#ifDescr
 				if "docsCableUpstream" in item.value:
+					docsis_channels.setFrameid(str(item.value))
 					docsis_channels.upstream_channel[item.oid_index] = docsisChannel(str(item.value))
 					docsis_channels.upstream_channel[item.oid_index].ifDescr = str(item.value) #redundancy?
 			elif item.oid == '.1.3.6.1.2.1.2.2.1.7':#ifAdminStatus
@@ -119,6 +122,7 @@ def pollDownstreamDocsisChannels(olt_name,ip_address,community):
 				break
 			if item.oid == '.1.3.6.1.2.1.2.2.1.2':#ifDescr
 				if "docsCableDownstream" in item.value:
+					docsis_channels.setFrameid(str(item.value))
 					docsis_channels.downstream_channel[item.oid_index] = docsisChannel(str(item.value))
 					docsis_channels.downstream_channel[item.oid_index].ifDescr = str(item.value) #redundancy?
 			elif item.oid == '.1.3.6.1.2.1.2.2.1.7':#ifAdminStatus
