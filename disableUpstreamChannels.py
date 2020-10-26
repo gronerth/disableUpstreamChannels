@@ -12,6 +12,8 @@ class docsisChannel(object):
 		self.ifDescr=ifDescr
 		self.status=0
 		self.frequency=0.0
+		values=self.ifDescr.split('/')
+		self.channelid=values[len(values)-1]
 
 	def setFrequency(self,frequency):
 		self.frequency=frequency
@@ -23,11 +25,12 @@ class docsisChannels(object):
 	def __init__(self):
 		self.upstream_channel = {}
 		self.downstream_channel = {}
+		self.frameid=0
 
 	def addUpstreamChannel(self,ifDescr):
+		values=ifDescr.split('/')[0]
+		self.frameid=values.split(' ')[1]
 		self.upstream_channel[ifDescr] = docsisChannel(ifDescr)
-
-
 
 parser = argparse.ArgumentParser(description='enable/disable upstream channels of all DCCAPs from OLT')
 parser.add_argument('--ip',dest='ip_address',required=True,help='Hostname or IP Address')
@@ -85,7 +88,7 @@ def pollDocsisChannels(olt_name,ip_address,community):
 		channel_frequency = docsis_channels.upstream_channel[upstream_channel].frequency
 		if channel_frequency == 0:
 			continue 
-		print(olt_name+","+docsis_channels.upstream_channel[upstream_channel].ifDescr + "," +  str(channel_frequency) + "," +  docsis_channels.upstream_channel[upstream_channel].status)
+		print(olt_name+","+docsis_channels.upstream_channel[upstream_channel].ifDescr + ","+ docsis_channels.frameid+ "," + docsis_channels.upstream_channel[upstream_channel].channelid +","+  str(channel_frequency) + "," +  docsis_channels.upstream_channel[upstream_channel].status)
 
 
 def pollDownstreamDocsisChannels(olt_name,ip_address,community):
@@ -126,13 +129,11 @@ def pollDownstreamDocsisChannels(olt_name,ip_address,community):
 				if item.oid_index  in docsis_channels.downstream_channel:
 					docsis_channels.downstream_channel[item.oid_index].setFrequency(int(item.value))
 									
-		
-
 	for downstream_channel in docsis_channels.downstream_channel:
 		channel_frequency = docsis_channels.downstream_channel[downstream_channel].frequency
 		if channel_frequency == 0:
 			continue 
-		print(olt_name+","+docsis_channels.downstream_channel[downstream_channel].ifDescr + "," +  str(channel_frequency) + "," +  docsis_channels.downstream_channel[downstream_channel].status)
+		print(olt_name+","+docsis_channels.downstream_channel[downstream_channel].ifDescr + "," +docsis_channels.frameid +","+docsis_channels.downstream_channel[downstream_channel].channelid+","+str(channel_frequency) + "," +  docsis_channels.downstream_channel[downstream_channel].status)
 
 def polling_olt(olt_name,ip_address,community):
 	if(args.type_channel=="u"):
